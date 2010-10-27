@@ -411,7 +411,7 @@ endif
 "  Generate (possibly exuberant) Ctags style tags for Perl sourcecode.
 "  Controlled by g:Perl_PerlTags, enabled by default.
 " ----------------------------------------------------------------------------
-if has('perl') && g:Perl_PerlTags == 'enabled'
+if has('perl') && ( exists("g:Perl_PerlTags") && g:Perl_PerlTags == 'enabled' )
   let g:Perl_PerlTagsTempfile = tempname()
   if getfsize( expand('%') ) > 0
     call Perl_do_tags( expand('%'), g:Perl_PerlTagsTempfile )
