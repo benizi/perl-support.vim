@@ -115,6 +115,14 @@ else
 	"
 	" user / system wide installation
 	"
+	function! Perl_FindPluginDir()
+		for dir in split(&rtp, ',')
+			if !empty(findfile('perl-support.vim', dir . '/plugin'))
+				return dir
+			endif
+		endfor
+	endfunction
+
 	let s:installation	= 'local'
 	if match( expand("<sfile>"), $VIM ) == 0
 		" system wide installation
@@ -122,7 +130,10 @@ else
 		let s:installation	= 'system'
 	else
 		" user installation assumed
-		let s:plugin_dir  	= $HOME.'/.vim/'
+		let s:plugin_dir = Perl_FindPluginDir() . '/'
+		if empty(s:plugin_dir)
+			let s:plugin_dir = $HOME.'/.vim/'
+		endif
 	endif
 
 	" user defined perl-support directories
@@ -130,7 +141,7 @@ else
 		let s:plugin_dir  	= g:Perl_Support_Root_Dir.'/'
 		let s:Perl_root_dir	= g:Perl_Support_Root_Dir
   else
-		let s:Perl_root_dir	= $HOME.'/.vim'
+		let s:Perl_root_dir	= s:plugin_dir
   endif
 
 	"
